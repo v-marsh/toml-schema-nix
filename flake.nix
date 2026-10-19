@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/c27cdad491a991b11ed731760aa2ef8db0cb0410"; # rustc 1.91.1
   };
 
-  outputs = {nixpkgs, ...}: let
+  outputs = {self, nixpkgs, ...}: let
     system = "x86_64-linux";
     pkgs = import nixpkgs {inherit system;};
   in {
@@ -24,5 +24,9 @@
 
       cargoHash = "sha256-VZXe9D6RMqtLh1eIRmsxVl5tFa8G/k/FW87NrYjLJtA=";
     });
+
+    overlays.default = final: prev: {
+      tosd = self.packages.${prev.stdenv.hostPlatform.system}.tosd;
+    };
   };
 }
